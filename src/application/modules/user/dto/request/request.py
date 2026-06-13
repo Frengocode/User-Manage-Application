@@ -1,5 +1,7 @@
-from pydantic import BaseModel, EmailStr
 from typing import Optional
+
+from pydantic import BaseModel, EmailStr
+
 from src.application.modules.user.domain.value_objects.role import RoleEnum
 
 

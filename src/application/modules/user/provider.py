@@ -1,0 +1,40 @@
+from dishka import Provider, Scope, provide
+from faststream.rabbit import RabbitBroker
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from src.application.modules.user.infrastructure.events.rabbitmq.user_created_event import (
+    UserCreatedEventRabbitMQ,
+)
+from src.application.modules.user.infrastructure.repository.sqlalchemy.user_repository import (
+    SQLALchemyUserRepository,
+)
+from src.application.modules.user.infrastructure.service.user_service import UserService
+from src.application.modules.user.interfaces.events.user_created_event import (
+    IUserCreatedEvent,
+)
+from src.application.modules.user.interfaces.repository.iuser_repository import (
+    IUserRepository,
+)
+from src.application.modules.user.interfaces.services.iuser_service import IUserService
+from src.application.modules.user.use_cases.create_user import CreateUserUseCase
+
+
+class UserProvider(Provider):
+
+    @provide(scope=Scope.REQUEST)
+    def create_user_use_case(
+        self, service: IUserService, event: IUserCreatedEvent
+    ) -> CreateUserUseCase:
+        return CreateUserUseCase(service=service, event=event)
+
+    @provide(scope=Scope.REQUEST)
+    def get_user_repository(self, session: AsyncSession) -> IUserRepository:
+        return SQLALchemyUserRepository(session=session)
+
+    @provide(scope=Scope.REQUEST)
+    def get_user_service(self, repository: IUserRepository) -> IUserService:
+        return UserService(repository=repository)
+
+    @provide(scope=Scope.REQUEST)
+    def get_user_created_event(self, broker: RabbitBroker) -> IUserCreatedEvent:
+        return UserCreatedEventRabbitMQ(broker=broker)

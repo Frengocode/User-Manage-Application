@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+
 from jose import jwt
 
 from src.application.common.shared.auth.interfaces.token.token_generator import (

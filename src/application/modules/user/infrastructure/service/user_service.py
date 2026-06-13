@@ -2,6 +2,7 @@ import logging
 from dataclasses import dataclass
 from typing import List, Optional
 
+from src.application.common.shared.auth.interfaces.hash.ihash import IHash
 from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.exceptions.exceptions import (
@@ -28,7 +29,6 @@ from src.application.modules.user.interfaces.repository.iuser_repository import 
 )
 from src.application.modules.user.interfaces.services.iuser_service import IUserService
 from src.application.utils.utils import get_logger
-from src.application.common.shared.auth.interfaces.hash.ihash import IHash
 
 log: logging.Logger = get_logger(__name__)
 
@@ -47,29 +47,20 @@ class UserService(IUserService):
         surname: Optional[Surname] = None,
     ) -> User:
 
-        try:
-            # Verifie's exist user by email (If exists)
-            await self.get_exist_user(email=email)
+        # Verifie's exist user by email (If exists)
+        await self.get_exist_user(email=email)
 
-            user_data: User = User(
-                id=id.generate(),
-                name=name,
-                surname=surname,
-                email=email,
-                password=Password(self.hasher.hash_value(password)),
-                role=role,
-            )
-            created_user: User = await self.repository.create_user(user=user_data)
+        user_data: User = User(
+            id=id.generate(),
+            name=name,
+            surname=surname,
+            email=email,
+            password=Password(self.hasher.hash_value(password)),
+            role=role,
+        )
+        created_user: User = await self.repository.create_user(user=user_data)
 
-            return created_user
-
-        except InvalidNameException:
-            log.error("Invalid name, name can't have 10 words %s", name)
-            raise InvalidNameExceptionHTTP()
-
-        except InvalidSurnameException:
-            log.error("Surname can not be more than 10 words %s", surname)
-            raise InvalidSurnameExceptionHTTP()
+        return created_user
 
     async def get_user(self, id: Id) -> Optional[User]:
         """Get's user or returns 404"""

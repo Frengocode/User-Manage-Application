@@ -2,9 +2,25 @@ import logging
 
 import aioredis
 from dishka import Provider, Scope, provide
-from sqlalchemy.ext.asyncio import AsyncSession
 from faststream.rabbit import RabbitBroker
+from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.application.common.shared.auth.infrastructure.hash.bcrypt_hash import (
+    BcryptHash,
+)
+from src.application.common.shared.auth.infrastructure.token.access_token_generator import (
+    AccessTokenGenerator,
+)
+from src.application.common.shared.auth.infrastructure.token.refresh_token_generator import (
+    RefreshTokenGenerator,
+)
+from src.application.common.shared.auth.interfaces.hash.ihash import IHash
+from src.application.common.shared.auth.interfaces.token.refresh_token_generator import (
+    IRefreshTokenGenerator,
+)
+from src.application.common.shared.auth.interfaces.token.token_generator import (
+    ITokenGenerator,
+)
 from src.application.common.shared.config.config import Settings
 from src.application.common.shared.database.sqlalchemy.sqlalchemy_database import (
     engine,
@@ -13,25 +29,6 @@ from src.application.common.shared.database.sqlalchemy.sqlalchemy_database impor
 from src.application.common.shared.exception.system.system_exception import (
     SystemCrashException,
 )
-from src.application.common.shared.auth.infrastructure.hash.bcrypt_hash import (
-    BcryptHash,
-)
-from src.application.common.shared.auth.interfaces.hash.ihash import IHash
-
-from src.application.common.shared.auth.infrastructure.token.access_token_generator import (
-    AccessTokenGenerator,
-)
-from src.application.common.shared.auth.infrastructure.token.refresh_token_generator import (
-    RefreshTokenGenerator,
-)
-from src.application.common.shared.auth.interfaces.token.refresh_token_generator import (
-    IRefreshTokenGenerator,
-)
-from src.application.common.shared.auth.interfaces.token.token_generator import (
-    ITokenGenerator,
-)
-
-
 from src.application.utils.utils import get_logger
 
 logger: logging.Logger = get_logger(__name__, logging.INFO)

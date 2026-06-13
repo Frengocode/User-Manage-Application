@@ -1,12 +1,4 @@
 from datetime import datetime, timedelta
-from jose import jwt
-
-from src.application.common.shared.auth.interfaces.token.token_generator import (
-    ITokenGenerator,
-)
-from src.application.common.shared.config.config import settings
-
-from datetime import datetime, timedelta
 
 from jose import jwt
 

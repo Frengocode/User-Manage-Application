@@ -1,4 +1,8 @@
+import logging
 from dataclasses import dataclass
+
+from faststream.rabbit import RabbitBroker
+
 from src.application.modules.user.interfaces.events.payload.user_created_payload import (
     UserCreatedEventPayload,
 )
@@ -6,8 +10,6 @@ from src.application.modules.user.interfaces.events.user_created_event import (
     IUserCreatedEvent,
 )
 from src.application.utils.utils import get_logger
-from faststream.rabbit import RabbitBroker
-import logging
 
 log: logging.Logger = get_logger(__name__)
 
