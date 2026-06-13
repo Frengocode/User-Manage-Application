@@ -50,6 +50,7 @@ class AuthSettings(BaseSettings):
     JWT_SECRET_KEY: SecretStr
     JWT_ALGORITHM: str
     JWT_ACCESS_TOKEN_EXPIRE_days: int
+    JWT_REFRESH_TOKEN_EXPIRE_DAYS: int
     model_config: SettingsConfigDict = SettingsConfigDict(
         env_file=".env", extra="allow"
     )

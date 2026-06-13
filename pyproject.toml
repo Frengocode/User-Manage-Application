@@ -14,8 +14,10 @@ dependencies = [
     "dishka>=1.10.1",
     "fastapi[all]>=0.136.3",
     "isort>=8.0.1",
+    "jwt>=1.4.0",
     "passlib>=1.7.4",
     "psycopg2-binary>=2.9.12",
     "pydantic-settings>=2.14.1",
+    "python-jose>=3.5.0",
     "sqlalchemy>=2.0.50",
 ]
