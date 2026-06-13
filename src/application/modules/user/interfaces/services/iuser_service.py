@@ -14,7 +14,6 @@ class IUserService(Protocol):
 
     async def create_user(
         self,
-        id: Id,
         email: Email,
         password: Password,
         role: Role,

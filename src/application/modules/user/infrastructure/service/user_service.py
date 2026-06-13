@@ -40,7 +40,6 @@ class UserService(IUserService):
 
     async def create_user(
         self,
-        id: Id,
         email: Email,
         password: Password,
         role: Role,
@@ -54,8 +53,8 @@ class UserService(IUserService):
 
             user_data: User = User(
                 id=id.generate(),
-                name=name.create(name),
-                surname=surname.create(surname),
+                name=name,
+                surname=surname,
                 email=email,
                 password=Password(self.hasher.hash_value(password)),
                 role=role,
