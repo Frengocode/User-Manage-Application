@@ -9,6 +9,7 @@ from src.application.modules.user.domain.value_objects.role import RoleEnum
 
 
 class SQLAlchemyUser(SQLAlchemyBase, SQLAlchemyMixin):
+    __tablename__ = "users"
 
     email: Mapped[str] = mapped_column(String, index=True, nullable=False)
     password: Mapped[str] = mapped_column(String)

@@ -17,10 +17,11 @@ from src.application.modules.user.interfaces.repository.iuser_repository import 
 )
 from src.application.modules.user.interfaces.services.iuser_service import IUserService
 from src.application.modules.user.use_cases.create_user import CreateUserUseCase
+from src.application.common.shared.auth.interfaces.hash.ihash import IHash
+from src.application.modules.user.use_cases.get_user import GetUserUseCase
 
 
 class UserProvider(Provider):
-
     @provide(scope=Scope.REQUEST)
     def create_user_use_case(
         self, service: IUserService, event: IUserCreatedEvent
@@ -28,12 +29,18 @@ class UserProvider(Provider):
         return CreateUserUseCase(service=service, event=event)
 
     @provide(scope=Scope.REQUEST)
+    def get_user_use_case(self, service: IUserService) -> GetUserUseCase:
+        return GetUserUseCase(service=service)
+
+    @provide(scope=Scope.REQUEST)
     def get_user_repository(self, session: AsyncSession) -> IUserRepository:
         return SQLALchemyUserRepository(session=session)
 
     @provide(scope=Scope.REQUEST)
-    def get_user_service(self, repository: IUserRepository) -> IUserService:
-        return UserService(repository=repository)
+    def get_user_service(
+        self, hasher: IHash, repository: IUserRepository
+    ) -> IUserService:
+        return UserService(hasher=hasher, repository=repository)
 
     @provide(scope=Scope.REQUEST)
     def get_user_created_event(self, broker: RabbitBroker) -> IUserCreatedEvent:

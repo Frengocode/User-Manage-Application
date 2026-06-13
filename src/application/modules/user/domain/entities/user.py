@@ -18,13 +18,14 @@ from src.application.modules.user.domain.value_objects.surname import Surname
 @dataclass(frozen=True)
 class User:
     id: Id
-    name: Optional[Name] = None
-    surname: Optional[Surname] = None
     email: Email
     password: Password
     is_active: IsActive
     role: Role
     created_at: datetime
+
+    name: Optional[Name] = None
+    surname: Optional[Surname] = None
     updated_at: Optional[datetime] = None
 
     def verify_exist_user(self, email: Email) -> None:

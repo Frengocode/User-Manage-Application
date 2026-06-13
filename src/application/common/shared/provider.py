@@ -1,9 +1,10 @@
 import logging
 
-import aioredis
+from typing import AsyncIterable
+from redis.asyncio import Redis
 from dishka import Provider, Scope, provide
 from faststream.rabbit import RabbitBroker
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from src.application.common.shared.auth.infrastructure.hash.bcrypt_hash import (
     BcryptHash,
@@ -31,33 +32,27 @@ from src.application.common.shared.exception.system.system_exception import (
 )
 from src.application.utils.utils import get_logger
 
-logger: logging.Logger = get_logger(__name__, logging.INFO)
+logger: logging.Logger = get_logger(__name__)
 
 
 class SharedProvider(Provider):
 
-    @provide(scope=Scope.APP)
-    async def get_db_session(self, settings: Settings) -> AsyncSession:
-        try:
-            async with engine(settings) as conn:
-                await conn.run_sync(lambda sync_conn: sync_conn.execute("SELECT 1"))
-            session: AsyncSession = session_factory(settings)
-            return session
-        except Exception as e:
-            logger.error(f"Can't reach to database : {e}")
-            raise SystemCrashException()
+    @provide(scope=Scope.REQUEST)
+    async def get_session(
+        self,
+    ) -> AsyncIterable[AsyncSession]:
+        async with session_factory() as session:
+            yield session
 
     @provide(scope=Scope.APP)
     def get_settings(self) -> Settings:
         return Settings()
 
     @provide(scope=Scope.APP)
-    async def get_redis_connection(self, settings: Settings):
+    async def get_redis_connection(self, settings: Settings) -> Redis:
         try:
-            redis = await aioredis.from_url(
+            redis = await Redis.from_url(
                 settings.redis.REDIS_URL.get_secret_value(),
-                encoding="utf-8",
-                decode_responses=True,
             )
             return redis
         except Exception as e:

@@ -76,7 +76,7 @@ class SQLALchemyUserRepository(IUserRepository):
     async def get_user(self, user_id: Id) -> User | None:
         """Get's user by Id"""
 
-        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=user_id)
+        stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(id=user_id)
         result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
         user: SQLAlchemyUser = result.scalars().first()
 
@@ -95,7 +95,7 @@ class SQLALchemyUserRepository(IUserRepository):
     async def get_user_by_email(self, email: Email) -> User | None:
         """Get's user by email"""
 
-        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=email)
+        stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(email=email)
         result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
         user: SQLAlchemyUser = result.scalars().first()
 
