@@ -85,6 +85,7 @@ class UserService(IUserService):
 
         try:
             user.is_admin(user.role)
+            return await self.repository.get
         except PermissionDenied:
             log.error(
                 "Users can't get, list of users (Access only for admins) %s", user.role

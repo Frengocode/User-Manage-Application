@@ -4,6 +4,7 @@ from typing import List, Union
 from sqlalchemy import Result, Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
@@ -81,6 +82,15 @@ class SQLALchemyUserRepository(IUserRepository):
 
         # Dumps orm object into domain model object
         return self._model_to_domain(user)
+
+    async def get_users(self, pagination: BasePagination) -> List[User]:
+        """Get's users"""
+        stmt: Select[SQLAlchemyUser] = (
+            select(self.model).offset(pagination.offset).limit(pagination.limit)
+        )
+        result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
+        users: List[SQLAlchemyUser] = result.scalars().all()
+        return self._model_to_domain(users)
 
     async def get_user_by_email(self, email: Email) -> User | None:
         """Get's user by email"""

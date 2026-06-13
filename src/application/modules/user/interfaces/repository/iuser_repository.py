@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import List
 
+from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
@@ -12,6 +14,9 @@ class IUserRepository(ABC):
 
     @abstractmethod
     async def get_user(self, user_id: Id) -> User | None: ...
+
+    @abstractmethod
+    async def get_users(self, pagination: BasePagination) -> List[User]: ...
 
     @abstractmethod
     async def get_user_by_email(self, email: Email) -> User | None: ...
