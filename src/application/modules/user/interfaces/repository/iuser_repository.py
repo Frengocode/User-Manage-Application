@@ -4,9 +4,9 @@ from typing import List, Optional
 from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects.email import Email
+from src.application.modules.user.domain.value_objects.id import Id
 from src.application.modules.user.domain.value_objects.name import Name
 from src.application.modules.user.domain.value_objects.surname import Surname
-from src.application.modules.user.domain.value_objects.id import Id
 
 
 class IUserRepository(ABC):

@@ -43,3 +43,11 @@ class IUserService(Protocol):
     async def delete_user(self, user: User) -> User: ...
 
     """ Delete's user """
+
+    async def update_user(
+        self,
+        user_id: Id,
+        name: Optional[Name] = None,
+        surname: Optional[Surname] = None,
+    ) -> User: ...
+    """ Updates user """

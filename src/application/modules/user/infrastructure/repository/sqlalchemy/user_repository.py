@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Union, Optional
+from typing import List, Optional, Union
 
 from sqlalchemy import Result, Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
