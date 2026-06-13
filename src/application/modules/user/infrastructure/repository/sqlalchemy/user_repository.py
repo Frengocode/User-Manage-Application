@@ -100,6 +100,18 @@ class SQLALchemyUserRepository(IUserRepository):
         updating_user.is_active = True
         await self.session.commit()
         await self.session.refresh(updating_user)
-        
+
+        # Dumps orm object into domain model object
+        return self._model_to_domain(updating_user)
+
+    async def update_user(self, user: User) -> User:
+        """Update user"""
+        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=user.id)
+        result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
+        updating_user: SQLAlchemyUser = result.scalars().first()
+
+        for name, value in user.__dict__:
+            setattr(name, value, updating_user)
+
         # Dumps orm object into domain model object
         return self._model_to_domain(updating_user)
