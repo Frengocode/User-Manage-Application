@@ -85,7 +85,7 @@ class UserService(IUserService):
 
         try:
             user.is_admin(user.role)
-            return await self.repository.get
+            return await self.repository.get_users(pagination=pagination)
         except PermissionDenied:
             log.error(
                 "Users can't get, list of users (Access only for admins) %s", user.role
@@ -100,3 +100,8 @@ class UserService(IUserService):
         except ExistUserException:
             log.error("This email was used by other user %s", email)
             raise ExistUserExceptionHTTP()
+
+
+    async def activate_user(self, user: User) -> User:
+        """ Activates user """
+        return await self.repository.update_status(user=user)
