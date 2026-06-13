@@ -3,14 +3,23 @@ from dataclasses import dataclass
 from typing import List, Optional
 
 from src.application.modules.user.domain.entities.user import User
-from src.application.modules.user.domain.exceptions.exceptions import ExistUserException
+from src.application.modules.user.domain.exceptions.exceptions import (
+    ExistUserException,
+    InvalidNameException,
+    InvalidSurnameException,
+)
 from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
 from src.application.modules.user.domain.value_objects.name import Name
 from src.application.modules.user.domain.value_objects.password import Password
 from src.application.modules.user.domain.value_objects.role import Role
 from src.application.modules.user.domain.value_objects.surname import Surname
-from src.application.modules.user.exceptions.exceptions import ExistUserExceptionHTTP
+from src.application.modules.user.exceptions.exceptions import (
+    ExistUserExceptionHTTP,
+    InvalidNameExceptionHTTP,
+    InvalidSurnameExceptionHTTP,
+    UserNotFoundExceptionHTTP,
+)
 from src.application.modules.user.interfaces.repository.iuser_repository import (
     IUserRepository,
 )
@@ -32,13 +41,45 @@ class UserService(IUserService):
         role: Role,
         name: Optional[Name] = None,
         surname: Optional[Surname] = None,
-    ) -> User: ...
+    ) -> User:
+
+        try:
+            # Verifie's exist user by email (If exists)
+            await self.get_exist_user(email=email)
+
+            user_data: User = User(
+                id=id.generate(),
+                name=name.create(name),
+                surname=surname.create(surname),
+                email=email,
+                password=password,
+                role=role,
+            )
+            created_user: User = await self.repository.create_user(user=user_data)
+
+            return created_user
+
+        except InvalidNameException:
+            log.error("Invalid name, name can't have 10 words %s", name)
+            raise InvalidNameExceptionHTTP()
+
+        except InvalidSurnameException:
+            log.error("Surname can not be more than 10 words %s", surname)
+            raise InvalidSurnameExceptionHTTP()
+
+    async def get_user(self, id: Id) -> Optional[User]:
+        """Get's user or returns 404"""
+        user: User | None = await self.repository.get_user(id=id)
+        if not user:
+            log.error("User not found %s", id)
+            raise UserNotFoundExceptionHTTP()
+        return user
 
     async def get_exist_user(self, email: Email) -> None:
         """If exist user exists by same email, return 400"""
         user: User = await self.repository.get_user_by_email(email=email)
         try:
             user.verify_exist_user(email=email)
-        except ExistUserException as e:
+        except ExistUserException:
             log.error("This email was used by other user %s", email)
             raise ExistUserExceptionHTTP()

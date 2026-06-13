@@ -31,30 +31,31 @@ class SQLALchemyUserRepository(IUserRepository):
         """Dumps orm objects or object into domain model object"""
 
         # Cheking data type of orm object
-        if isinstance(model, list):
-            for user in model:
-                return User(
-                    id=Id(user.id),
-                    name=Name(user.name),
-                    surname=Surname(user.surname),
-                    email=Email(user.email),
-                    role=Role(user.role),
-                    password=Password(user.password),
-                    is_active=IsActive(user.is_active),
-                    created_at=user.created_at,
-                    updated_at=user.updated_at,
-                )
-        return User(
-            id=Id(model.id),
-            name=Name(model.name),
-            surname=Surname(model.surname),
-            email=Email(model.email),
-            role=Role(model.role),
-            password=Password(model.password),
-            is_active=IsActive(model.is_active),
-            created_at=model.created_at,
-            updated_at=model.updated_at,
-        )
+        if model is not None:
+            if isinstance(model, list):
+                for user in model:
+                    return User(
+                        id=Id(user.id),
+                        name=Name(user.name),
+                        surname=Surname(user.surname),
+                        email=Email(user.email),
+                        role=Role(user.role),
+                        password=Password(user.password),
+                        is_active=IsActive(user.is_active),
+                        created_at=user.created_at,
+                        updated_at=user.updated_at,
+                    )
+            return User(
+                id=Id(model.id),
+                name=Name(model.name),
+                surname=Surname(model.surname),
+                email=Email(model.email),
+                role=Role(model.role),
+                password=Password(model.password),
+                is_active=IsActive(model.is_active),
+                created_at=model.created_at,
+                updated_at=model.updated_at,
+            )
 
     async def create_user(self, user: User) -> User:
         creating_user: SQLAlchemyUser = self.model(
