@@ -5,8 +5,11 @@ from typing import List, Optional
 from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.exceptions.exceptions import (
-    ExistUserException, InvalidNameException, InvalidSurnameException,
-    PermissionDenied)
+    ExistUserException,
+    InvalidNameException,
+    InvalidSurnameException,
+    PermissionDenied,
+)
 from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
 from src.application.modules.user.domain.value_objects.name import Name
@@ -14,13 +17,16 @@ from src.application.modules.user.domain.value_objects.password import Password
 from src.application.modules.user.domain.value_objects.role import Role
 from src.application.modules.user.domain.value_objects.surname import Surname
 from src.application.modules.user.exceptions.exceptions import (
-    AccessDeniedExceptionHTTP, ExistUserExceptionHTTP,
-    InvalidNameExceptionHTTP, InvalidSurnameExceptionHTTP,
-    UserNotFoundExceptionHTTP)
-from src.application.modules.user.interfaces.repository.iuser_repository import \
-    IUserRepository
-from src.application.modules.user.interfaces.services.iuser_service import \
-    IUserService
+    AccessDeniedExceptionHTTP,
+    ExistUserExceptionHTTP,
+    InvalidNameExceptionHTTP,
+    InvalidSurnameExceptionHTTP,
+    UserNotFoundExceptionHTTP,
+)
+from src.application.modules.user.interfaces.repository.iuser_repository import (
+    IUserRepository,
+)
+from src.application.modules.user.interfaces.services.iuser_service import IUserService
 from src.application.utils.utils import get_logger
 
 log: logging.Logger = get_logger(__name__)

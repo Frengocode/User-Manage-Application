@@ -8,16 +8,17 @@ from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
-from src.application.modules.user.domain.value_objects.is_active import \
-    IsActive
+from src.application.modules.user.domain.value_objects.is_active import IsActive
 from src.application.modules.user.domain.value_objects.name import Name
 from src.application.modules.user.domain.value_objects.password import Password
 from src.application.modules.user.domain.value_objects.role import Role
 from src.application.modules.user.domain.value_objects.surname import Surname
-from src.application.modules.user.infrastructure.models.sqlalchemy.user import \
-    SQLAlchemyUser
-from src.application.modules.user.interfaces.repository.iuser_repository import \
-    IUserRepository
+from src.application.modules.user.infrastructure.models.sqlalchemy.user import (
+    SQLAlchemyUser,
+)
+from src.application.modules.user.interfaces.repository.iuser_repository import (
+    IUserRepository,
+)
 
 
 @dataclass(frozen=True)
