@@ -2,11 +2,13 @@ import logging
 from dataclasses import dataclass
 from typing import List, Optional
 
+from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.exceptions.exceptions import (
     ExistUserException,
     InvalidNameException,
     InvalidSurnameException,
+    PermissionDenied,
 )
 from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
@@ -15,6 +17,7 @@ from src.application.modules.user.domain.value_objects.password import Password
 from src.application.modules.user.domain.value_objects.role import Role
 from src.application.modules.user.domain.value_objects.surname import Surname
 from src.application.modules.user.exceptions.exceptions import (
+    AccessDeniedExceptionHTTP,
     ExistUserExceptionHTTP,
     InvalidNameExceptionHTTP,
     InvalidSurnameExceptionHTTP,
@@ -74,6 +77,19 @@ class UserService(IUserService):
             log.error("User not found %s", id)
             raise UserNotFoundExceptionHTTP()
         return user
+
+    async def get_users(
+        self, user: User, pagination: BasePagination
+    ) -> Optional[List[User]]:
+        """Get's users (only for admins)"""
+
+        try:
+            user.is_admin(user.role)
+        except PermissionDenied:
+            log.error(
+                "Users can't get, list of users (Access only for admins) %s", user.role
+            )
+            raise AccessDeniedExceptionHTTP()
 
     async def get_exist_user(self, email: Email) -> None:
         """If exist user exists by same email, return 400"""

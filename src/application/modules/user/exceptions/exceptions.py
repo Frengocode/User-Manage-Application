@@ -19,3 +19,8 @@ class InvalidSurnameExceptionHTTP(BaseHTTPException):
 class UserNotFoundExceptionHTTP(BaseHTTPException):
     status_code: int = 404
     detail: str = "User not found"
+
+
+class AccessDeniedExceptionHTTP(BaseHTTPException):
+    status_code: int = 403
+    detail: str = "Access Denied"
