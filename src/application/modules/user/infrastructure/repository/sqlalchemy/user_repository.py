@@ -117,3 +117,15 @@ class SQLALchemyUserRepository(IUserRepository):
 
         # Dumps orm object into domain model object
         return self._model_to_domain(updating_user)
+
+    async def delete_user(self, user_id: Id) -> User:
+        """Delete user"""
+        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=user_id)
+        result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
+        user: SQLAlchemyUser = result.scalars().first()
+        await self.session.delete(user)
+        await self.session.commit()
+        await self.session.refresh(user)
+
+        # Dumps orm object into domain model object
+        return self._model_to_domain(user)
