@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Union
 
-from sqlalchemy import Result, select
+from sqlalchemy import Result, Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.modules.user.domain.entities.user import User
@@ -30,7 +30,7 @@ class SQLALchemyUserRepository(IUserRepository):
     ) -> Union[List[User], User]:
         """Dumps orm objects or object into domain model object"""
 
-        #Cheking data type of orm object
+        # Cheking data type of orm object
         if isinstance(model, list):
             for user in model:
                 return User(
@@ -57,11 +57,12 @@ class SQLALchemyUserRepository(IUserRepository):
         )
 
     async def create_user(self, user: User) -> User:
-        creating_user: SQLAlchemyUser = SQLAlchemyUser(
+        creating_user: SQLAlchemyUser = self.model(
             id=user.id,
             email=user.email,
             password=user.password,
             name=user.name,
+            role=user.role,
             surname=user.surname,
         )
         self.session.add(creating_user)
@@ -70,5 +71,9 @@ class SQLALchemyUserRepository(IUserRepository):
         # Dumps orm object into domain model object
         return self._model_to_domain(creating_user)
 
-    async def get_user(self, id):
-        return await super().get_user(id)
+    async def get_user(self, id: Id) -> User | None:
+        """Get's user by Id"""
+        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=id)
+        result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
+        user: SQLAlchemyUser = result.scalars().first()
+        return self._model_to_domain(user)
