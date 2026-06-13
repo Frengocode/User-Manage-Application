@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import List, Union
 
 from sqlalchemy import Result, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -8,6 +9,7 @@ from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
 from src.application.modules.user.domain.value_objects.is_active import IsActive
 from src.application.modules.user.domain.value_objects.name import Name
+from src.application.modules.user.domain.value_objects.password import Password
 from src.application.modules.user.domain.value_objects.role import Role
 from src.application.modules.user.domain.value_objects.surname import Surname
 from src.application.modules.user.infrastructure.models.sqlalchemy.user import (
@@ -23,6 +25,37 @@ class SQLALchemyUserRepository(IUserRepository):
     session: AsyncSession
     model = SQLAlchemyUser
 
+    def _model_to_domain(
+        self, model: Union[List[SQLAlchemyUser], SQLAlchemyUser]
+    ) -> Union[List[User], User]:
+        """Dumps orm objects or object into domain model object"""
+
+        #Cheking data type of orm object
+        if isinstance(model, list):
+            for user in model:
+                return User(
+                    id=Id(user.id),
+                    name=Name(user.name),
+                    surname=Surname(user.surname),
+                    email=Email(user.email),
+                    role=Role(user.role),
+                    password=Password(user.password),
+                    is_active=IsActive(user.is_active),
+                    created_at=user.created_at,
+                    updated_at=user.updated_at,
+                )
+        return User(
+            id=Id(model.id),
+            name=Name(model.name),
+            surname=Surname(model.surname),
+            email=Email(model.email),
+            role=Role(model.role),
+            password=Password(model.password),
+            is_active=IsActive(model.is_active),
+            created_at=model.created_at,
+            updated_at=model.updated_at,
+        )
+
     async def create_user(self, user: User) -> User:
         creating_user: SQLAlchemyUser = SQLAlchemyUser(
             id=user.id,
@@ -34,13 +67,8 @@ class SQLALchemyUserRepository(IUserRepository):
         self.session.add(creating_user)
         await self.session.commit()
 
-        return User(
-            id=Id(creating_user.id),
-            email=Email(creating_user.email),
-            name=Name(creating_user.name),
-            surname=Surname(creating_user.surname),
-            role=Role(creating_user.role),
-            is_active=IsActive(creating_user.is_active),
-            created_at=creating_user.created_at,
-            updated_at=creating_user.updated_at,
-        )
+        # Dumps orm object into domain model object
+        return self._model_to_domain(creating_user)
+
+    async def get_user(self, id):
+        return await super().get_user(id)
