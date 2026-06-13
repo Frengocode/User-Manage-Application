@@ -13,6 +13,25 @@ from src.application.common.shared.database.sqlalchemy.sqlalchemy_database impor
 from src.application.common.shared.exception.system.system_exception import (
     SystemCrashException,
 )
+from src.application.common.shared.auth.infrastructure.hash.bcrypt_hash import (
+    BcryptHash,
+)
+from src.application.common.shared.auth.interfaces.hash.ihash import IHash
+
+from src.application.common.shared.auth.infrastructure.token.access_token_generator import (
+    AccessTokenGenerator,
+)
+from src.application.common.shared.auth.infrastructure.token.refresh_token_generator import (
+    RefreshTokenGenerator,
+)
+from src.application.common.shared.auth.interfaces.token.refresh_token_generator import (
+    IRefreshTokenGenerator,
+)
+from src.application.common.shared.auth.interfaces.token.token_generator import (
+    ITokenGenerator,
+)
+
+
 from src.application.utils.utils import get_logger
 
 logger: logging.Logger = get_logger(__name__, logging.INFO)
@@ -59,3 +78,15 @@ class SharedProvider(Provider):
         except Exception as e:
             logger.error(f"Can't reach to RabbitMQ %s ", e)
             raise SystemCrashException()
+
+    @provide(scope=Scope.APP)
+    def bcrypt_hash(self) -> IHash:
+        return BcryptHash()
+
+    @provide(scope=Scope.APP)
+    def access_token_generator(self) -> ITokenGenerator:
+        return AccessTokenGenerator()
+
+    @provide(scope=Scope.APP)
+    def refresh_token_generator(self) -> IRefreshTokenGenerator:
+        return RefreshTokenGenerator()

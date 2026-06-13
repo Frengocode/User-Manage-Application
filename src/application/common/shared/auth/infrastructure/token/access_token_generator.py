@@ -9,7 +9,6 @@ from src.application.common.shared.config.config import settings
 
 class AccessTokenGenerator(ITokenGenerator):
 
-
     @staticmethod
     def create_access_token(data: dict) -> str:
         to_encode = data.copy()

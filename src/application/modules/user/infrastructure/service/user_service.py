@@ -28,6 +28,7 @@ from src.application.modules.user.interfaces.repository.iuser_repository import 
 )
 from src.application.modules.user.interfaces.services.iuser_service import IUserService
 from src.application.utils.utils import get_logger
+from src.application.common.shared.auth.interfaces.hash.ihash import IHash
 
 log: logging.Logger = get_logger(__name__)
 
@@ -35,6 +36,7 @@ log: logging.Logger = get_logger(__name__)
 @dataclass(frozen=True)
 class UserService(IUserService):
     repository: IUserRepository
+    hasher: IHash
 
     async def create_user(
         self,
@@ -55,7 +57,7 @@ class UserService(IUserService):
                 name=name.create(name),
                 surname=surname.create(surname),
                 email=email,
-                password=password,
+                password=Password(self.hasher.hash_value(password)),
                 role=role,
             )
             created_user: User = await self.repository.create_user(user=user_data)
