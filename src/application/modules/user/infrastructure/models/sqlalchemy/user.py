@@ -1,10 +1,10 @@
 from sqlalchemy import Boolean, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.application.common.shared.database.sqlalchemy.mixin import SQLAlchemyMixin
-from src.application.common.shared.database.sqlalchemy.sqlalchemy_database import (
-    SQLAlchemyBase,
-)
+from src.application.common.shared.database.sqlalchemy.mixin import \
+    SQLAlchemyMixin
+from src.application.common.shared.database.sqlalchemy.sqlalchemy_database import \
+    SQLAlchemyBase
 from src.application.modules.user.domain.value_objects.role import RoleEnum
 
 

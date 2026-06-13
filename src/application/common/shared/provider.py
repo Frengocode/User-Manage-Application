@@ -7,12 +7,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.common.shared.config.config import Settings
 from src.application.common.shared.database.sqlalchemy.sqlalchemy_database import (
-    engine,
-    session_factory,
-)
-from src.application.common.shared.exception.system.system_exception import (
-    SystemCrashException,
-)
+    engine, session_factory)
+from src.application.common.shared.exception.system.system_exception import \
+    SystemCrashException
 from src.application.utils.utils import get_logger
 
 logger: logging.Logger = get_logger(__name__, logging.INFO)
