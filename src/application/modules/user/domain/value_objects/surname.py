@@ -3,8 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from application.modules.user.domain.exceptions.exceptions import \
-    InvalidSurnameException
+from application.modules.user.domain.exceptions.exceptions import (
+    InvalidSurnameException,
+)
 
 
 @dataclass(frozen=True)
