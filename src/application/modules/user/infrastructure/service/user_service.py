@@ -114,6 +114,10 @@ class UserService(IUserService):
             log.error("Admins only can delete users %s", user.role)
             raise AccessDeniedExceptionHTTP()
 
-
-    async def update_user(self, user_id: Id, name: Name, surname:  None) -> User:
+    async def update_user(
+        self,
+        user_id: Id,
+        name: Optional[Name] = None,
+        surname: Optional[Surname] = None,
+    ) -> User:
         return await super().update_user(user_id, name, surname)

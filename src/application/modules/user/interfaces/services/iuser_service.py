@@ -50,4 +50,5 @@ class IUserService(Protocol):
         name: Optional[Name] = None,
         surname: Optional[Surname] = None,
     ) -> User: ...
+
     """ Updates user """
