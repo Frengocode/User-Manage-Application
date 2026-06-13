@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime
 from typing import Optional
 
 from src.application.modules.user.domain.exceptions.exceptions import (
@@ -23,6 +24,8 @@ class User:
     password: Password
     is_active: IsActive
     role: Role
+    created_at: datetime
+    updated_at: Optional[datetime] = None
 
     def verify_exist_user(self, email: Email) -> None:
         """Verifie's exist user"""
