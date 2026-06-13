@@ -101,7 +101,15 @@ class UserService(IUserService):
             log.error("This email was used by other user %s", email)
             raise ExistUserExceptionHTTP()
 
-
     async def activate_user(self, user: User) -> User:
-        """ Activates user """
+        """Activates user"""
         return await self.repository.update_status(user=user)
+
+    async def delete_user(self, user: User) -> User:
+        """Deletes user (only for admin)"""
+        try:
+            user.is_admin(role=Role(user.role))
+            return await self.repository.delete_user(user_id=Id(user.id))
+        except PermissionDenied:
+            log.error("Admins only can delete users %s", user.role)
+            raise AccessDeniedExceptionHTTP()
