@@ -112,6 +112,8 @@ class SQLALchemyUserRepository(IUserRepository):
 
         for name, value in user.__dict__:
             setattr(name, value, updating_user)
+        await self.session.commit()
+        await self.session.refresh(updating_user)
 
         # Dumps orm object into domain model object
         return self._model_to_domain(updating_user)
