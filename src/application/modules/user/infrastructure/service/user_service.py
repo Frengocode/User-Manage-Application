@@ -120,4 +120,7 @@ class UserService(IUserService):
         name: Optional[Name] = None,
         surname: Optional[Surname] = None,
     ) -> User:
-        return await super().update_user(user_id, name, surname)
+        """Updates user"""
+        return await self.repository.update_user(
+            user_id=user_id, name=name, surname=surname
+        )
