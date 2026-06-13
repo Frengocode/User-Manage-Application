@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Union
+from typing import List, Union, Optional
 
 from sqlalchemy import Result, Select, select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -115,14 +115,20 @@ class SQLALchemyUserRepository(IUserRepository):
         # Dumps orm object into domain model object
         return self._model_to_domain(updating_user)
 
-    async def update_user(self, user: User) -> User:
+    async def update_user(
+        self,
+        user_id: Id,
+        name: Optional[Name] = None,
+        surname: Optional[Surname] = Name,
+    ) -> User:
         """Update user"""
-        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=user.id)
+        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=user_id)
         result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
         updating_user: SQLAlchemyUser = result.scalars().first()
 
-        for name, value in user.__dict__:
-            setattr(name, value, updating_user)
+        updating_user.name = name.update_name(name)
+        updating_user.surname = surname.update_surname(surname)
+
         await self.session.commit()
         await self.session.refresh(updating_user)
 
