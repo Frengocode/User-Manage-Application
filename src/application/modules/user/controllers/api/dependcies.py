@@ -1,13 +1,15 @@
-from dishka.integrations.fastapi import inject, FromDishka
+import logging
 from typing import Annotated, Optional
+
+from dishka.integrations.fastapi import FromDishka, inject
 from fastapi import Depends
 from fastapi.security import OAuth2PasswordBearer
-from src.application.common.shared.config.config import settings
-from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
-from src.application.modules.user.dto.response.response import SUser
-from src.application.utils.utils import get_logger
 from jose import jwt
-import logging
+
+from src.application.common.shared.config.config import settings
+from src.application.modules.user.dto.response.response import SUser
+from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
+from src.application.utils.utils import get_logger
 
 log: logging.Logger = get_logger(__name__)
 

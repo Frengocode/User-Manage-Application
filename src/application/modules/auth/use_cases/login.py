@@ -10,9 +10,7 @@ from src.application.common.shared.auth.interfaces.token.refresh_token_generator
 from src.application.common.shared.auth.interfaces.token.token_generator import (
     ITokenGenerator,
 )
-from src.application.modules.auth.dto.responses.response import (
-    SLogin,
-)
+from src.application.modules.auth.dto.responses.response import SLogin
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects import email, password
 from src.application.modules.user.interfaces.use_cases.iget_auth_user import (

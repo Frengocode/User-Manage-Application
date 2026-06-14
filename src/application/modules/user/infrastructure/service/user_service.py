@@ -66,19 +66,10 @@ class UserService(IUserService):
             raise UserNotFoundExceptionHTTP()
         return user
 
-    async def get_users(
-        self, user: User, pagination: BasePagination
-    ) -> Optional[List[User]]:
+    async def get_users(self, pagination: BasePagination) -> Optional[List[User]]:
         """Get's users (only for admins)"""
 
-        try:
-            user.is_admin(user.role)
-            return await self.repository.get_users(pagination=pagination)
-        except PermissionDenied:
-            log.error(
-                "Users can't get, list of users (Access only for admins) %s", user.role
-            )
-            raise AccessDeniedExceptionHTTP()
+        return await self.repository.get_users(pagination=pagination)
 
     async def get_exist_user(self, email: Email) -> None:
         """If exist user exists by same email, return 400"""

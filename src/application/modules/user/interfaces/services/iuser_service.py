@@ -29,9 +29,7 @@ class IUserService(Protocol):
 
     """ Get's exist user by email, if exists, returns 404 """
 
-    async def get_users(
-        self, user: User, pagination: BasePagination
-    ) -> Optional[List[User]]: ...
+    async def get_users(self, pagination: BasePagination) -> Optional[List[User]]: ...
 
     """ Get's users, can use only users with Admin role """
 

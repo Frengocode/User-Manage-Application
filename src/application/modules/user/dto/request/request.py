@@ -2,6 +2,7 @@ from typing import Optional
 
 from pydantic import BaseModel, EmailStr
 
+from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.value_objects.role import RoleEnum
 
 
@@ -16,3 +17,7 @@ class SCreateUserRequest(BaseModel):
 class SGetAuthUserRequest(BaseModel):
     email: EmailStr
     password: str
+
+
+class SGetUsersRequest(BasePagination):
+    pass

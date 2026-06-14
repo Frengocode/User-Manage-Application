@@ -1,6 +1,7 @@
+from typing import Union
+
 from dishka import Provider, Scope, provide
 from faststream.rabbit import RabbitBroker
-from typing import Union
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.common.shared.auth.interfaces.hash.ihash import IHash
@@ -21,10 +22,10 @@ from src.application.modules.user.interfaces.services.iuser_service import IUser
 from src.application.modules.user.interfaces.use_cases.iget_auth_user import (
     IGetAuthUserUseCase,
 )
+from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
 from src.application.modules.user.use_cases.create_user import CreateUserUseCase
 from src.application.modules.user.use_cases.get_auth_user import GetAuthUserUseCase
 from src.application.modules.user.use_cases.get_user import GetUserUseCase
-from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
 
 
 class UserProvider(Provider):

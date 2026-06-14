@@ -2,13 +2,13 @@ from typing import Annotated, Optional
 
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Path, Depends
+from fastapi import APIRouter, Depends, Path
 
+from src.application.modules.user.controllers.api.dependcies import get_current_user
 from src.application.modules.user.dto.request.request import SCreateUserRequest
 from src.application.modules.user.dto.response.response import SUser
-from src.application.modules.user.use_cases.create_user import CreateUserUseCase
 from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
-from src.application.modules.user.controllers.api.dependcies import get_current_user
+from src.application.modules.user.use_cases.create_user import CreateUserUseCase
 
 users_api_v1_router: APIRouter = APIRouter(
     prefix="/users/api/v1", tags=["Users api v1"]
