@@ -2,23 +2,17 @@ import logging
 from dataclasses import dataclass
 
 from src.application.modules.user.domain.entities.user import User
-from src.application.modules.user.domain.value_objects import (
-    email,
-    id,
-    name,
-    password,
-    role,
-    surname,
-)
+from src.application.modules.user.domain.value_objects import (email, id, name,
+                                                               password, role,
+                                                               surname)
 from src.application.modules.user.dto.request.request import SCreateUserRequest
 from src.application.modules.user.dto.response.response import SUser
-from src.application.modules.user.interfaces.events.payload.user_created_payload import (
-    UserCreatedEventPayload,
-)
-from src.application.modules.user.interfaces.events.user_created_event import (
-    IUserCreatedEvent,
-)
-from src.application.modules.user.interfaces.services.iuser_service import IUserService
+from src.application.modules.user.interfaces.events.payload.user_created_payload import \
+    UserCreatedEventPayload
+from src.application.modules.user.interfaces.events.user_created_event import \
+    IUserCreatedEvent
+from src.application.modules.user.interfaces.services.iuser_service import \
+    IUserService
 from src.application.utils.utils import get_logger
 
 log: logging.Logger = get_logger(__name__)

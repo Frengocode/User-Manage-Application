@@ -7,9 +7,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from alembic import context
 from src.application.common.shared.config.config import settings
-from src.application.common.shared.database.sqlalchemy.sqlalchemy_database import (
-    SQLAlchemyBase,
-)
+from src.application.common.shared.database.sqlalchemy.sqlalchemy_database import \
+    SQLAlchemyBase
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

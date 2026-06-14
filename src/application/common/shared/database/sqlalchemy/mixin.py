@@ -1,13 +1,8 @@
 from datetime import UTC, datetime
 
 from sqlalchemy import DateTime, String
-from sqlalchemy.orm import (
-    DeclarativeBase,
-    Mapped,
-    declarative_mixin,
-    declared_attr,
-    mapped_column,
-)
+from sqlalchemy.orm import (DeclarativeBase, Mapped, declarative_mixin,
+                            declared_attr, mapped_column)
 
 
 @declarative_mixin
