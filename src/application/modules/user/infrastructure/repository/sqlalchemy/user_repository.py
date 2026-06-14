@@ -148,7 +148,6 @@ class SQLALchemyUserRepository(IUserRepository):
         user: SQLAlchemyUser = result.scalars().first()
         await self.session.delete(user)
         await self.session.commit()
-        await self.session.refresh(user)
 
         # Dumps orm object into domain model object
         user.id = user_id.value

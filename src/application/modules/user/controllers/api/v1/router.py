@@ -13,6 +13,7 @@ from src.application.modules.user.dto.request.request import (
 from src.application.modules.user.dto.response.response import SUser
 from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
 from src.application.modules.user.use_cases.create_user import CreateUserUseCase
+from src.application.modules.user.use_cases.delete_user import DeleteUserUseCase
 from src.application.modules.user.use_cases.get_users import GetUsersUseCase
 from src.application.modules.user.use_cases.update_user import UpdateUserUseCase
 
@@ -73,3 +74,15 @@ async def update_user_use_case(
     use_case: FromDishka[UpdateUserUseCase],
 ) -> Optional[SUser]:
     return await use_case.execute(user_id=user_id, request=request)
+
+
+@users_api_v1_router.delete(
+    "/delete/{user_id}", response_model=SUser, summary="Deletes user (Only for admins)"
+)
+@inject
+async def delete_user(
+    user_id: Annotated[str, Path(...)],
+    current_user: Annotated[SUser, Depends(get_current_user)],
+    use_case: FromDishka[DeleteUserUseCase],
+) -> Optional[SUser]:
+    return await use_case.execute(current_user=current_user, user_id=user_id)
