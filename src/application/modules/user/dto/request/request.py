@@ -11,3 +11,9 @@ class SCreateUserRequest(BaseModel):
     surname: Optional[str] = None
     role: RoleEnum
     password: str
+
+
+
+class SGetAuthUserRequest(BaseModel):
+    email: EmailStr
+    password: str
