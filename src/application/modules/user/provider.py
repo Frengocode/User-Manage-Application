@@ -22,6 +22,7 @@ from src.application.modules.user.interfaces.use_cases.iget_auth_user import (
 )
 from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
 from src.application.modules.user.use_cases.create_user import CreateUserUseCase
+from src.application.modules.user.use_cases.delete_user import DeleteUserUseCase
 from src.application.modules.user.use_cases.get_auth_user import GetAuthUserUseCase
 from src.application.modules.user.use_cases.get_user import GetUserUseCase
 from src.application.modules.user.use_cases.get_users import GetUsersUseCase
@@ -66,3 +67,7 @@ class UserProvider(Provider):
     @provide(scope=Scope.REQUEST)
     def update_user_use_case(self, service: IUserService) -> UpdateUserUseCase:
         return UpdateUserUseCase(service=service)
+
+    @provide(scope=Scope.REQUEST)
+    def delete_user_use_case(self, service: IUserService) -> DeleteUserUseCase:
+        return DeleteUserUseCase(service=service)

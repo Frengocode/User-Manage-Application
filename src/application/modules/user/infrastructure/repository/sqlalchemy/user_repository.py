@@ -31,33 +31,34 @@ class SQLALchemyUserRepository(IUserRepository):
         model: Union[List[SQLAlchemyUser], SQLAlchemyUser],
     ) -> Union[List[User], User]:
 
-        if isinstance(model, list):
-            return [
-                User(
-                    id=Id(user.id),
-                    name=Name(user.name),
-                    surname=Surname(user.surname),
-                    email=Email(user.email),
-                    role=Role(user.role),
-                    password=Password(user.password),
-                    is_active=IsActive(user.is_active),
-                    created_at=user.created_at,
-                    updated_at=user.updated_at,
-                )
-                for user in model
-            ]
+        if model is not None:
+            if isinstance(model, list):
+                return [
+                    User(
+                        id=Id(user.id),
+                        name=Name(user.name),
+                        surname=Surname(user.surname),
+                        email=Email(user.email),
+                        role=Role(user.role),
+                        password=Password(user.password),
+                        is_active=IsActive(user.is_active),
+                        created_at=user.created_at,
+                        updated_at=user.updated_at,
+                    )
+                    for user in model
+                ]
 
-        return User(
-            id=Id(model.id),
-            name=Name(model.name),
-            surname=Surname(model.surname),
-            email=Email(model.email),
-            role=Role(model.role),
-            password=Password(model.password),
-            is_active=IsActive(model.is_active),
-            created_at=model.created_at,
-            updated_at=model.updated_at,
-        )
+            return User(
+                id=Id(model.id),
+                name=Name(model.name),
+                surname=Surname(model.surname),
+                email=Email(model.email),
+                role=Role(model.role),
+                password=Password(model.password),
+                is_active=IsActive(model.is_active),
+                created_at=model.created_at,
+                updated_at=model.updated_at,
+            )
 
     async def create_user(self, user: User) -> User:
         creating_user: SQLAlchemyUser = self.model(
@@ -121,25 +122,28 @@ class SQLALchemyUserRepository(IUserRepository):
         self,
         user_id: Id,
         name: Optional[Name] = None,
-        surname: Optional[Surname] = Name,
+        surname: Optional[Surname] = None,
     ) -> User:
-        """Update user"""
-        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=user_id)
-        result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
-        updating_user: SQLAlchemyUser = result.scalars().first()
 
-        updating_user.name = name.update_name(name)
-        updating_user.surname = surname.update_surname(surname)
+        stmt = select(self.model).filter_by(id=user_id.value)
+        result = await self.session.execute(stmt)
+
+        updating_user = result.scalars().first()
+
+        if name is not None:
+            updating_user.name = name.value
+
+        if surname is not None:
+            updating_user.surname = surname.value
 
         await self.session.commit()
         await self.session.refresh(updating_user)
 
-        # Dumps orm object into domain model object
         return self._model_to_domain(updating_user)
 
     async def delete_user(self, user_id: Id) -> User:
         """Delete user"""
-        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=user_id)
+        stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(id=user_id.value)
         result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
         user: SQLAlchemyUser = result.scalars().first()
         await self.session.delete(user)
@@ -147,4 +151,5 @@ class SQLALchemyUserRepository(IUserRepository):
         await self.session.refresh(user)
 
         # Dumps orm object into domain model object
+        user.id = user_id.value
         return self._model_to_domain(user)

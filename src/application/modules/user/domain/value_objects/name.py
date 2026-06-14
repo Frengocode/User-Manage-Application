@@ -12,8 +12,3 @@ class Name:
     def create(cls, name: Optional[str]) -> Name:
         if name is not None:
             return Name(value=name)
-
-    def update_name(self, new_name: Optional[str]) -> Name:
-        if not new_name.strip():
-            return self
-        return Name(value=new_name)

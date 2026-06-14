@@ -85,14 +85,9 @@ class UserService(IUserService):
         """Activates user"""
         return await self.repository.update_status(user=user)
 
-    async def delete_user(self, user: User) -> User:
+    async def delete_user(self, user_id: Id) -> User:
         """Deletes user (only for admin)"""
-        try:
-            user.is_admin(role=Role(user.role))
-            return await self.repository.delete_user(user_id=Id(user.id))
-        except PermissionDenied:
-            log.error("Admins only can delete users %s", user.role)
-            raise AccessDeniedExceptionHTTP()
+        return await self.repository.delete_user(user_id=user_id)
 
     async def update_user(
         self,

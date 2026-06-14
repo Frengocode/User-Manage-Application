@@ -37,7 +37,7 @@ class IUserService(Protocol):
 
     """ Activate's user """
 
-    async def delete_user(self, user: User) -> User: ...
+    async def delete_user(self, user_id: Id) -> User: ...
 
     """ Delete's user """
 

@@ -66,8 +66,9 @@ async def get_users(
     response_model=SUser,
     summary="Updates user (Opportunity to update for anyone to update for anyone)",
 )
+@inject
 async def update_user_use_case(
-    user_id: Annotated[int, Path(...)],
+    user_id: Annotated[str, Path(...)],
     request: SUpdateUserRequest,
     use_case: FromDishka[UpdateUserUseCase],
 ) -> Optional[SUser]:

@@ -17,7 +17,7 @@ class SUser(BaseModel):
     role: RoleEnum
     is_active: bool
     created_at: datetime
-    updated_at: Optional[str] = None
+    updated_at: Optional[datetime] = None
 
     @classmethod
     def cls(cls, user: User) -> SUser:
