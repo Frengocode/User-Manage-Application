@@ -13,7 +13,6 @@ class SCreateUserRequest(BaseModel):
     password: str
 
 
-
 class SGetAuthUserRequest(BaseModel):
     email: EmailStr
     password: str

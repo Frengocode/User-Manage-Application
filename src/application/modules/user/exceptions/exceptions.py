@@ -24,3 +24,8 @@ class UserNotFoundExceptionHTTP(BaseHTTPException):
 class AccessDeniedExceptionHTTP(BaseHTTPException):
     status_code: int = 403
     detail: str = "Access Denied"
+
+
+class InvalidDataExceptionHTTP(BaseHTTPException):
+    status_code: int = 400
+    detail: str = "Invalid email or password"
