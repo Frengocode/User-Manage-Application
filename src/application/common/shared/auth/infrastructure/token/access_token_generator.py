@@ -2,8 +2,9 @@ from datetime import datetime, timedelta
 
 from jose import jwt
 
-from src.application.common.shared.auth.interfaces.token.token_generator import \
-    ITokenGenerator
+from src.application.common.shared.auth.interfaces.token.token_generator import (
+    ITokenGenerator,
+)
 from src.application.common.shared.config.config import settings
 
 
@@ -23,7 +24,7 @@ class AccessTokenGenerator(ITokenGenerator):
 
         to_encode.update({"exp": expire})
 
-        encoded_jwt = jwt.encode(
+        encoded_jwt: str = jwt.encode(
             to_encode,
             settings.auth.JWT_SECRET_KEY.get_secret_value(),
             algorithm=settings.auth.JWT_ALGORITHM,

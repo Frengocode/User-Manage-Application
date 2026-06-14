@@ -3,15 +3,15 @@ from datetime import datetime
 from typing import Optional
 
 from src.application.modules.user.domain.exceptions.exceptions import (
-    ExistUserException, PermissionDenied)
+    ExistUserException,
+    PermissionDenied,
+)
 from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
-from src.application.modules.user.domain.value_objects.is_active import \
-    IsActive
+from src.application.modules.user.domain.value_objects.is_active import IsActive
 from src.application.modules.user.domain.value_objects.name import Name
 from src.application.modules.user.domain.value_objects.password import Password
-from src.application.modules.user.domain.value_objects.role import (Role,
-                                                                    RoleEnum)
+from src.application.modules.user.domain.value_objects.role import Role, RoleEnum
 from src.application.modules.user.domain.value_objects.surname import Surname
 
 

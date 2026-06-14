@@ -6,8 +6,7 @@ from fastapi import APIRouter, Path
 
 from src.application.modules.user.dto.request.request import SCreateUserRequest
 from src.application.modules.user.dto.response.response import SUser
-from src.application.modules.user.use_cases.create_user import \
-    CreateUserUseCase
+from src.application.modules.user.use_cases.create_user import CreateUserUseCase
 from src.application.modules.user.use_cases.get_user import GetUserUseCase
 
 users_api_v1_router: APIRouter = APIRouter(

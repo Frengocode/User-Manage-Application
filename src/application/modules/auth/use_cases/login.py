@@ -5,13 +5,22 @@ from typing import Optional
 from fastapi.security import OAuth2PasswordRequestForm
 from utils.utils import get_logger
 
-from src.application.common.shared.auth.interfaces.token.token_generator import \
-    ITokenGenerator
-from src.application.modules.auth.dto.responses.response import SLogin
+from src.application.common.shared.auth.interfaces.token.refresh_token_generator import (
+    IRefreshTokenGenerator,
+)
+from src.application.common.shared.auth.interfaces.token.token_generator import (
+    ITokenGenerator,
+)
+from src.application.modules.auth.dto.responses.response import (
+    SAccessToken,
+    SLogin,
+    SRefreshToken,
+)
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects import email, password
-from src.application.modules.user.interfaces.use_cases.iget_auth_user import \
-    IGetAuthUserUseCase
+from src.application.modules.user.interfaces.use_cases.iget_auth_user import (
+    IGetAuthUserUseCase,
+)
 
 log: logging.Logger = get_logger(__name__)
 
@@ -20,15 +29,26 @@ log: logging.Logger = get_logger(__name__)
 class LoginUseCase:
     get_auth_user_use_case: IGetAuthUserUseCase
     token_generator: ITokenGenerator
+    refresh_token_generator: IRefreshTokenGenerator
 
     async def execute(self, form: OAuth2PasswordRequestForm) -> Optional[SLogin]:
 
         user: Optional[User] = await self.get_auth_user_use_case.execute(
             email=email.Email(form.username), password=password.Password(form.password)
         )
-        access_token: str = self.token_generator.create_token(
+        generated_access_token: str = self.token_generator.create_token(
             data={"sub": user.id.value}
+        )
+        generated_refresh_token: str = (
+            self.refresh_token_generator.create_refresh_token(
+                data={"sub": user.id.value}
+            )
+        )
+
+        access_token: SAccessToken = SAccessToken(access_token=generated_access_token)
+        refresh_token: SRefreshToken = SRefreshToken(
+            refresh_token=generated_refresh_token
         )
 
         log.info("Access token was successfully generated %s ", user.id.value)
-        return SLogin(access_token=access_token)
+        return SLogin(access_token=access_token, refresh_token=refresh_token)

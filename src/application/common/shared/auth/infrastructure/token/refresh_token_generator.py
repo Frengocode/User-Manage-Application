@@ -2,15 +2,15 @@ from datetime import datetime, timedelta
 
 from jose import jwt
 
-from src.application.common.shared.auth.interfaces.token.token_generator import \
-    ITokenGenerator
+from src.application.common.shared.auth.interfaces.token.refresh_token_generator import (
+    IRefreshTokenGenerator,
+)
 from src.application.common.shared.config.config import settings
 
 
-class RefreshTokenGenerator(ITokenGenerator):
+class RefreshTokenGenerator(IRefreshTokenGenerator):
 
-    @staticmethod
-    def create_refresh_token(data: dict) -> str:
+    def create_refresh_token(self, data: dict) -> str:
         to_encode = data.copy()
 
         if "sub" in to_encode:

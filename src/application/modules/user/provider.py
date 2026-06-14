@@ -3,24 +3,25 @@ from faststream.rabbit import RabbitBroker
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.common.shared.auth.interfaces.hash.ihash import IHash
-from src.application.modules.user.infrastructure.events.rabbitmq.user_created_event import \
-    UserCreatedEventRabbitMQ
-from src.application.modules.user.infrastructure.repository.sqlalchemy.user_repository import \
-    SQLALchemyUserRepository
-from src.application.modules.user.infrastructure.service.user_service import \
-    UserService
-from src.application.modules.user.interfaces.events.user_created_event import \
-    IUserCreatedEvent
-from src.application.modules.user.interfaces.repository.iuser_repository import \
-    IUserRepository
-from src.application.modules.user.interfaces.services.iuser_service import \
-    IUserService
-from src.application.modules.user.interfaces.use_cases.iget_auth_user import \
-    IGetAuthUserUseCase
-from src.application.modules.user.use_cases.create_user import \
-    CreateUserUseCase
-from src.application.modules.user.use_cases.get_auth_user import \
-    GetAuthUserUseCase
+from src.application.modules.user.infrastructure.events.rabbitmq.user_created_event import (
+    UserCreatedEventRabbitMQ,
+)
+from src.application.modules.user.infrastructure.repository.sqlalchemy.user_repository import (
+    SQLALchemyUserRepository,
+)
+from src.application.modules.user.infrastructure.service.user_service import UserService
+from src.application.modules.user.interfaces.events.user_created_event import (
+    IUserCreatedEvent,
+)
+from src.application.modules.user.interfaces.repository.iuser_repository import (
+    IUserRepository,
+)
+from src.application.modules.user.interfaces.services.iuser_service import IUserService
+from src.application.modules.user.interfaces.use_cases.iget_auth_user import (
+    IGetAuthUserUseCase,
+)
+from src.application.modules.user.use_cases.create_user import CreateUserUseCase
+from src.application.modules.user.use_cases.get_auth_user import GetAuthUserUseCase
 from src.application.modules.user.use_cases.get_user import GetUserUseCase
 
 

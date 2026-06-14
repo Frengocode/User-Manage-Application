@@ -6,22 +6,30 @@ from faststream.rabbit import RabbitBroker
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
-from src.application.common.shared.auth.infrastructure.hash.bcrypt_hash import \
-    BcryptHash
-from src.application.common.shared.auth.infrastructure.token.access_token_generator import \
-    AccessTokenGenerator
-from src.application.common.shared.auth.infrastructure.token.refresh_token_generator import \
-    RefreshTokenGenerator
+from src.application.common.shared.auth.infrastructure.hash.bcrypt_hash import (
+    BcryptHash,
+)
+from src.application.common.shared.auth.infrastructure.token.access_token_generator import (
+    AccessTokenGenerator,
+)
+from src.application.common.shared.auth.infrastructure.token.refresh_token_generator import (
+    RefreshTokenGenerator,
+)
 from src.application.common.shared.auth.interfaces.hash.ihash import IHash
-from src.application.common.shared.auth.interfaces.token.refresh_token_generator import \
-    IRefreshTokenGenerator
-from src.application.common.shared.auth.interfaces.token.token_generator import \
-    ITokenGenerator
+from src.application.common.shared.auth.interfaces.token.refresh_token_generator import (
+    IRefreshTokenGenerator,
+)
+from src.application.common.shared.auth.interfaces.token.token_generator import (
+    ITokenGenerator,
+)
 from src.application.common.shared.config.config import Settings
 from src.application.common.shared.database.sqlalchemy.sqlalchemy_database import (
-    engine, session_factory)
-from src.application.common.shared.exception.system.system_exception import \
-    SystemCrashException
+    engine,
+    session_factory,
+)
+from src.application.common.shared.exception.system.system_exception import (
+    SystemCrashException,
+)
 from src.application.utils.utils import get_logger
 
 logger: logging.Logger = get_logger(__name__)
