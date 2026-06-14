@@ -9,6 +9,10 @@ from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects.role import RoleEnum
 
 
+class SAccountConfirmation(BaseModel):
+    id: str
+
+
 class SUser(BaseModel):
     id: str
     email: EmailStr
