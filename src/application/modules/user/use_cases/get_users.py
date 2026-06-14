@@ -22,13 +22,10 @@ class GetUsersUseCase:
     ) -> Optional[List[SUser]]:
 
         if current_user.role == RoleEnum.ADMIN:
-            response: List[SUser] = []
             users: Optional[List[User]] = await self.service.get_users(
                 pagination=request
             )
-            for user in users:
-                response.append(SUser.cls(user))
-            return response
+            return [SUser.cls(user) for user in users]
 
         log.info("Allowed only for admins not for users")
         raise AccessDeniedExceptionHTTP()

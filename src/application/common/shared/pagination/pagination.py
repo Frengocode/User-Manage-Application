@@ -1,8 +1,8 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class BasePagination(BaseModel):
     """Base Pagination"""
 
-    offset: int = Field(min_length=0)
-    limit: int = Field(min_length=10)
+    offset: int
+    limit: int

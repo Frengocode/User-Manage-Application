@@ -19,5 +19,10 @@ class SGetAuthUserRequest(BaseModel):
     password: str
 
 
+class SUpdateUserRequest(BaseModel):
+    name: Optional[str] = None
+    surname: Optional[str] = None
+
+
 class SGetUsersRequest(BasePagination):
     pass

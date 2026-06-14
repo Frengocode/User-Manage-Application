@@ -1,5 +1,3 @@
-from typing import Union
-
 from dishka import Provider, Scope, provide
 from faststream.rabbit import RabbitBroker
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -27,6 +25,7 @@ from src.application.modules.user.use_cases.create_user import CreateUserUseCase
 from src.application.modules.user.use_cases.get_auth_user import GetAuthUserUseCase
 from src.application.modules.user.use_cases.get_user import GetUserUseCase
 from src.application.modules.user.use_cases.get_users import GetUsersUseCase
+from src.application.modules.user.use_cases.update_user import UpdateUserUseCase
 
 
 class UserProvider(Provider):
@@ -63,3 +62,7 @@ class UserProvider(Provider):
     @provide(scope=Scope.REQUEST)
     def get_users_use_case(self, service: IUserService) -> GetUsersUseCase:
         return GetUsersUseCase(service=service)
+
+    @provide(scope=Scope.REQUEST)
+    def update_user_use_case(self, service: IUserService) -> UpdateUserUseCase:
+        return UpdateUserUseCase(service=service)
