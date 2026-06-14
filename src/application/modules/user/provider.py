@@ -51,5 +51,7 @@ class UserProvider(Provider):
         return UserCreatedEventRabbitMQ(broker=broker)
 
     @provide(scope=Scope.REQUEST)
-    def get_auth_user_use_case(self, service: IUserService) -> IGetAuthUserUseCase:
-        return GetAuthUserUseCase(service=service)
+    def get_auth_user_use_case(
+        self, hasher: IHash, service: IUserService
+    ) -> IGetAuthUserUseCase:
+        return GetAuthUserUseCase(service=service, hasher=hasher)

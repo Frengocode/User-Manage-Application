@@ -2,6 +2,7 @@ import logging
 from dataclasses import dataclass
 from typing import Optional
 
+from src.application.common.shared.auth.interfaces.hash.ihash import IHash
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.exceptions.exceptions import (
     InvalidPasswordException,
@@ -22,11 +23,11 @@ log: logging.Logger = get_logger(__name__)
 @dataclass(frozen=True)
 class GetAuthUserUseCase(IGetAuthUserUseCase):
     service: IUserService
+    hasher: IHash
 
     async def execute(self, email: Email, password: Password) -> Optional[User]:
-        try:
-            user: Optional[User] = await self.service.get_user_by_email(email=email)
-            user.password.verify_password(password=password)
-        except InvalidPasswordException:
-            log.info("Invalid email or password %s", email)
-            raise InvalidDataExceptionHTTP()
+        user: Optional[User] = await self.service.get_user_by_email(email=email)
+        if self.hasher.verify_hash(password.value, user.password.value):
+            return user
+        log.error("Invalid email or password %s ", email.value)
+        raise InvalidDataExceptionHTTP()

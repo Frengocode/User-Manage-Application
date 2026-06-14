@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from typing import Optional
 
 from fastapi.security import OAuth2PasswordRequestForm
-from utils.utils import get_logger
 
 from src.application.common.shared.auth.interfaces.token.refresh_token_generator import (
     IRefreshTokenGenerator,
@@ -21,6 +20,7 @@ from src.application.modules.user.domain.value_objects import email, password
 from src.application.modules.user.interfaces.use_cases.iget_auth_user import (
     IGetAuthUserUseCase,
 )
+from src.application.utils.utils import get_logger
 
 log: logging.Logger = get_logger(__name__)
 
