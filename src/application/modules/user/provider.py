@@ -1,17 +1,32 @@
 from dishka import Provider, Scope, provide
 from faststream.rabbit import RabbitBroker
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src.application.common.shared.auth.interfaces.hash.ihash import IHash
+from src.application.modules.user.infrastructure.cache.user_cache import UserCache
+from src.application.modules.user.infrastructure.confirmation.account.account_confirmation import (
+    AccountConfirmation,
+)
 from src.application.modules.user.infrastructure.events.rabbitmq.user_created_event import (
     UserCreatedEventRabbitMQ,
+)
+from src.application.modules.user.infrastructure.handlers.user_created_handler import (
+    UserCreatedEventHandler,
 )
 from src.application.modules.user.infrastructure.repository.sqlalchemy.user_repository import (
     SQLALchemyUserRepository,
 )
 from src.application.modules.user.infrastructure.service.user_service import UserService
+from src.application.modules.user.interfaces.cache.iuser_cache import IUserCache
+from src.application.modules.user.interfaces.confirmation.confirmation import (
+    IAccountConfirmation,
+)
 from src.application.modules.user.interfaces.events.user_created_event import (
     IUserCreatedEvent,
+)
+from src.application.modules.user.interfaces.handlers.iuser_created_handler import (
+    IUserCreatedEventHandler,
 )
 from src.application.modules.user.interfaces.repository.iuser_repository import (
     IUserRepository,
@@ -71,3 +86,19 @@ class UserProvider(Provider):
     @provide(scope=Scope.REQUEST)
     def delete_user_use_case(self, service: IUserService) -> DeleteUserUseCase:
         return DeleteUserUseCase(service=service)
+
+    @provide(scope=Scope.REQUEST)
+    def get_user_cache(self, redis: Redis) -> IUserCache:
+        return UserCache(redis=redis)
+
+    @provide(scope=Scope.REQUEST)
+    def get_account_confirmation(self) -> IAccountConfirmation:
+        return AccountConfirmation()
+
+    @provide(scope=Scope.REQUEST)
+    def get_user_created_event_handler(
+        self, cache: IUserCache, account_confirmation_sender: IAccountConfirmation
+    ) -> IUserCreatedEventHandler:
+        return UserCreatedEventHandler(
+            cache=cache, account_confirmation_sender=account_confirmation_sender
+        )

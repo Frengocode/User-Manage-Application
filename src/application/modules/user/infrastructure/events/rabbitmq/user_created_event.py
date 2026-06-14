@@ -3,6 +3,10 @@ from dataclasses import dataclass
 
 from faststream.rabbit import RabbitBroker
 
+from src.application.modules.user.constants.constants import (
+    USER_CREATED_ROUTING_KEY,
+    USERS_EXCHANGE,
+)
 from src.application.modules.user.interfaces.events.payload.user_created_payload import (
     UserCreatedEventPayload,
 )
@@ -25,5 +29,6 @@ class UserCreatedEventRabbitMQ(IUserCreatedEvent):
         log.info("Message pushed into rabbitmq %s", payload)
         await self.broker.publish(
             payload.model_dump(),
-            routing_key="user.created",
+            exchange=USERS_EXCHANGE,
+            routing_key=USER_CREATED_ROUTING_KEY,
         )
