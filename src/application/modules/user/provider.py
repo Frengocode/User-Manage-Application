@@ -26,6 +26,7 @@ from src.application.modules.user.interfaces.use_cases.iget_user import IGetUser
 from src.application.modules.user.use_cases.create_user import CreateUserUseCase
 from src.application.modules.user.use_cases.get_auth_user import GetAuthUserUseCase
 from src.application.modules.user.use_cases.get_user import GetUserUseCase
+from src.application.modules.user.use_cases.get_users import GetUsersUseCase
 
 
 class UserProvider(Provider):
@@ -58,3 +59,7 @@ class UserProvider(Provider):
         self, hasher: IHash, service: IUserService
     ) -> IGetAuthUserUseCase:
         return GetAuthUserUseCase(service=service, hasher=hasher)
+
+    @provide(scope=Scope.REQUEST)
+    def get_users_use_case(self, service: IUserService) -> GetUsersUseCase:
+        return GetUsersUseCase(service=service)
