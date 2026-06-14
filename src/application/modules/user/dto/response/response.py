@@ -15,6 +15,7 @@ class SUser(BaseModel):
     name: Optional[str] = None
     surname: Optional[str] = None
     role: RoleEnum
+    is_active: bool
     created_at: datetime
     updated_at: Optional[str] = None
 
@@ -26,6 +27,7 @@ class SUser(BaseModel):
             name=user.name.value,
             surname=user.surname.value,
             role=user.role.value,
+            is_active=user.is_active.value,
             created_at=user.created_at,
             updated_at=user.updated_at,
         )
