@@ -1,9 +1,9 @@
 import logging
-
 from typing import AsyncIterable
-from redis.asyncio import Redis
+
 from dishka import Provider, Scope, provide
 from faststream.rabbit import RabbitBroker
+from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from src.application.common.shared.auth.infrastructure.hash.bcrypt_hash import (
@@ -62,7 +62,11 @@ class SharedProvider(Provider):
     @provide(scope=Scope.APP)
     async def get_rabbitmq_connection(self, settings: Settings) -> RabbitBroker:
         try:
-            return RabbitBroker(settings.rabbitmq.RABBITMQ_URL.get_secret_value())
+            broker: RabbitBroker = RabbitBroker(
+                settings.rabbitmq.RABBITMQ_URL.get_secret_value()
+            )
+            await broker.connect()
+            return broker
         except Exception as e:
             logger.error(f"Can't reach to RabbitMQ %s ", e)
             raise SystemCrashException()

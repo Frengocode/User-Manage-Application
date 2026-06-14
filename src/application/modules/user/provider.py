@@ -2,6 +2,7 @@ from dishka import Provider, Scope, provide
 from faststream.rabbit import RabbitBroker
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.application.common.shared.auth.interfaces.hash.ihash import IHash
 from src.application.modules.user.infrastructure.events.rabbitmq.user_created_event import (
     UserCreatedEventRabbitMQ,
 )
@@ -17,7 +18,6 @@ from src.application.modules.user.interfaces.repository.iuser_repository import 
 )
 from src.application.modules.user.interfaces.services.iuser_service import IUserService
 from src.application.modules.user.use_cases.create_user import CreateUserUseCase
-from src.application.common.shared.auth.interfaces.hash.ihash import IHash
 from src.application.modules.user.use_cases.get_user import GetUserUseCase
 
 

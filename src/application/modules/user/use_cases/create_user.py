@@ -34,14 +34,14 @@ class CreateUserUseCase:
         created_user: User = await self.service.create_user(
             email=email.Email(request.email),
             password=password.Password(request.password),
-            role=role.Role(request.role),
+            role=role.Role(request.role.value),
             name=name.Name.create(request.name),
             surname=surname.Surname.create(request.surname),
         )
 
-        event_payload: UserCreatedEventPayload = UserCreatedEventPayload.model_validate(
+        event_payload: UserCreatedEventPayload = UserCreatedEventPayload.cls(
             created_user
         )
         await self.event.publish_event(event_payload)
         log.info("User created successfully %s", created_user.id)
-        return SUser.model_validate(created_user)
+        return SUser.cls(created_user)

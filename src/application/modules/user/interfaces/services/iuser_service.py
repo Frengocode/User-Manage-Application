@@ -51,3 +51,7 @@ class IUserService(Protocol):
     ) -> User: ...
 
     """ Updates user """
+
+    async def get_user_by_email(self, email: Email) -> Optional[User]: ...
+
+    """ Get's user by email """

@@ -1,7 +1,8 @@
+from typing import Annotated, Optional
+
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
 from fastapi import APIRouter, Path
-from typing import Annotated, Optional
 
 from src.application.modules.user.dto.request.request import SCreateUserRequest
 from src.application.modules.user.dto.response.response import SUser
@@ -26,6 +27,6 @@ async def create_user(
 )
 @inject
 async def get_user(
-    user_id: Annotated[int, Path(...)], use_case: FromDishka[GetUserUseCase]
+    user_id: Annotated[str, Path(...)], use_case: FromDishka[GetUserUseCase]
 ) -> Optional[SUser]:
     return await use_case.execute(user_id=user_id)

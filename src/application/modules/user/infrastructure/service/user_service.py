@@ -7,8 +7,6 @@ from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.exceptions.exceptions import (
     ExistUserException,
-    InvalidNameException,
-    InvalidSurnameException,
     PermissionDenied,
 )
 from src.application.modules.user.domain.value_objects.email import Email
@@ -20,8 +18,6 @@ from src.application.modules.user.domain.value_objects.surname import Surname
 from src.application.modules.user.exceptions.exceptions import (
     AccessDeniedExceptionHTTP,
     ExistUserExceptionHTTP,
-    InvalidNameExceptionHTTP,
-    InvalidSurnameExceptionHTTP,
     UserNotFoundExceptionHTTP,
 )
 from src.application.modules.user.interfaces.repository.iuser_repository import (
@@ -51,11 +47,11 @@ class UserService(IUserService):
         await self.get_exist_user(email=email)
 
         user_data: User = User(
-            id=id.generate(),
+            id=Id.generate(),
             name=name,
             surname=surname,
             email=email,
-            password=Password(self.hasher.hash_value(password)),
+            password=Password(self.hasher.hash_value(password.value)),
             role=role,
         )
         created_user: User = await self.repository.create_user(user=user_data)
@@ -64,7 +60,7 @@ class UserService(IUserService):
 
     async def get_user(self, id: Id) -> Optional[User]:
         """Get's user or returns 404"""
-        user: User | None = await self.repository.get_user(id=id)
+        user: User | None = await self.repository.get_user(user_id=id)
         if not user:
             log.error("User not found %s", id)
             raise UserNotFoundExceptionHTTP()
@@ -88,7 +84,8 @@ class UserService(IUserService):
         """If exist user exists by same email, return 400"""
         user: User = await self.repository.get_user_by_email(email=email)
         try:
-            user.verify_exist_user(email=email)
+            if user is not None:
+                user.verify_exist_user(email=email)
         except ExistUserException:
             log.error("This email was used by other user %s", email)
             raise ExistUserExceptionHTTP()
@@ -116,3 +113,11 @@ class UserService(IUserService):
         return await self.repository.update_user(
             user_id=user_id, name=name, surname=surname
         )
+
+    async def get_user_by_email(self, email: Email) -> Optional[User]:
+        """Get's user by email (If exists)"""
+        user: User | None = await self.repository.get_user_by_email(email=email)
+        if user is not None:
+            return user
+        log.info("User not found %s", email)
+        raise UserNotFoundExceptionHTTP()

@@ -60,15 +60,16 @@ class SQLALchemyUserRepository(IUserRepository):
 
     async def create_user(self, user: User) -> User:
         creating_user: SQLAlchemyUser = self.model(
-            id=user.id,
-            email=user.email,
-            password=user.password,
-            name=user.name,
-            role=user.role,
-            surname=user.surname,
+            id=user.id.value,
+            email=user.email.value,
+            password=user.password.value,
+            name=user.name.value,
+            role=user.role.value,
+            surname=user.surname.value,
         )
         self.session.add(creating_user)
         await self.session.commit()
+        await self.session.refresh(creating_user)
 
         # Dumps orm object into domain model object
         return self._model_to_domain(creating_user)
@@ -76,7 +77,7 @@ class SQLALchemyUserRepository(IUserRepository):
     async def get_user(self, user_id: Id) -> User | None:
         """Get's user by Id"""
 
-        stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(id=user_id)
+        stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(id=user_id.value)
         result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
         user: SQLAlchemyUser = result.scalars().first()
 
@@ -95,7 +96,7 @@ class SQLALchemyUserRepository(IUserRepository):
     async def get_user_by_email(self, email: Email) -> User | None:
         """Get's user by email"""
 
-        stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(email=email)
+        stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(email=email.value)
         result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
         user: SQLAlchemyUser = result.scalars().first()
 

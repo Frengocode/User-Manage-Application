@@ -19,11 +19,11 @@ from src.application.modules.user.domain.value_objects.surname import Surname
 class User:
     id: Id
     email: Email
-    password: Password
-    is_active: IsActive
     role: Role
-    created_at: datetime
 
+    created_at: Optional[datetime] = None
+    password: Optional[Password] = None
+    is_active: Optional[IsActive] = None
     name: Optional[Name] = None
     surname: Optional[Surname] = None
     updated_at: Optional[datetime] = None

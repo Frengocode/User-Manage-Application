@@ -12,7 +12,7 @@ from src.application.common.shared.auth.interfaces.hash.ihash import IHash
 class BcryptHash(IHash):
     crypt_context = CryptContext(schemes=["bcrypt"])
 
-    def hash_value(value: str) -> str:
+    def hash_value(self, value: str) -> str:
 
         prehashed = hashlib.sha256(value.encode("utf-8")).digest()
         encoded = base64.b64encode(prehashed)
@@ -20,7 +20,7 @@ class BcryptHash(IHash):
         hashed = bcrypt.hashpw(encoded, bcrypt.gensalt())
         return hashed.decode("utf-8")
 
-    def verify_hash(secret: str, hash: str) -> bool:
+    def verify_hash(self, secret: str, hash: str) -> bool:
         prehashed = hashlib.sha256(secret.encode("utf-8")).digest()
         encoded = base64.b64encode(prehashed)
 
