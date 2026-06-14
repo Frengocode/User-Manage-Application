@@ -3,16 +3,13 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class SRefreshToken(BaseModel):
-    refresh_token: str
-    type: Optional[str] = "refresh"
-
-
 class SAccessToken(BaseModel):
     access_token: str
-    type: Optional[str] = "beaerer"
+    type: Optional[str] = "bearer"
 
 
 class SLogin(BaseModel):
-    access_token: SAccessToken
-    refresh_token: SRefreshToken
+
+    access_token: str
+    refresh_token: str
+    type: Optional[str] = "bearer"

@@ -11,9 +11,7 @@ from src.application.common.shared.auth.interfaces.token.token_generator import 
     ITokenGenerator,
 )
 from src.application.modules.auth.dto.responses.response import (
-    SAccessToken,
     SLogin,
-    SRefreshToken,
 )
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects import email, password
@@ -45,10 +43,7 @@ class LoginUseCase:
             )
         )
 
-        access_token: SAccessToken = SAccessToken(access_token=generated_access_token)
-        refresh_token: SRefreshToken = SRefreshToken(
-            refresh_token=generated_refresh_token
-        )
-
         log.info("Access token was successfully generated %s ", user.id.value)
-        return SLogin(access_token=access_token, refresh_token=refresh_token)
+        return SLogin(
+            access_token=generated_access_token, refresh_token=generated_refresh_token
+        )

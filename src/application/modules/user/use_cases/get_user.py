@@ -5,10 +5,11 @@ from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.value_objects.id import Id
 from src.application.modules.user.dto.response.response import SUser
 from src.application.modules.user.interfaces.services.iuser_service import IUserService
+from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
 
 
 @dataclass(frozen=True)
-class GetUserUseCase:
+class GetUserUseCase(IGetUserUseCase):
     service: IUserService
 
     async def execute(self, user_id: str) -> Optional[SUser]:

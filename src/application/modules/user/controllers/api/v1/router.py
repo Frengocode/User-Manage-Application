@@ -2,12 +2,13 @@ from typing import Annotated, Optional
 
 from dishka import FromDishka
 from dishka.integrations.fastapi import inject
-from fastapi import APIRouter, Path
+from fastapi import APIRouter, Path, Depends
 
 from src.application.modules.user.dto.request.request import SCreateUserRequest
 from src.application.modules.user.dto.response.response import SUser
 from src.application.modules.user.use_cases.create_user import CreateUserUseCase
-from src.application.modules.user.use_cases.get_user import GetUserUseCase
+from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
+from src.application.modules.user.controllers.api.dependcies import get_current_user
 
 users_api_v1_router: APIRouter = APIRouter(
     prefix="/users/api/v1", tags=["Users api v1"]
@@ -27,6 +28,14 @@ async def create_user(
 )
 @inject
 async def get_user(
-    user_id: Annotated[str, Path(...)], use_case: FromDishka[GetUserUseCase]
+    user_id: Annotated[str, Path(...)], use_case: FromDishka[IGetUserUseCase]
 ) -> Optional[SUser]:
     return await use_case.execute(user_id=user_id)
+
+
+@users_api_v1_router.get("/me/get", response_model=SUser, summary="Get's current user")
+@inject
+async def get_user_me(
+    current_user: Annotated[SUser, Depends(get_current_user)],
+) -> Optional[SUser]:
+    return current_user
