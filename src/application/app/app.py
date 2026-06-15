@@ -4,8 +4,9 @@ from fastapi import FastAPI
 from src.application.app.container import container
 from src.application.modules.auth.controllers.api.v1.router import auth_api_v1_router
 from src.application.modules.user.controllers.api.v1.router import users_api_v1_router
-from src.application.modules.user.infrastructure.schedular.schedular import SchedulerService
-
+from src.application.modules.user.infrastructure.schedular.schedular import (
+    SchedulerService,
+)
 
 app: FastAPI = FastAPI(title="User managment app")
 app.include_router(users_api_v1_router)

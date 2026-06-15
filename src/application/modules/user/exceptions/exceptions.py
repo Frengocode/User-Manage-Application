@@ -29,3 +29,8 @@ class AccessDeniedExceptionHTTP(BaseHTTPException):
 class InvalidDataExceptionHTTP(BaseHTTPException):
     status_code: int = 400
     detail: str = "Invalid email or password"
+
+
+class ExpiredTokenExceptionHTTP(BaseHTTPException):
+    status_code: int = 400
+    detail: str = "Expired token"
