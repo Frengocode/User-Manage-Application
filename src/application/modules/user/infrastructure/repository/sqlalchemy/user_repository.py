@@ -156,7 +156,7 @@ class SQLALchemyUserRepository(IUserRepository):
             return self._model_to_domain(user)
 
     async def get_not_activated_users(self) -> List[User]:
-        time_threshold = datetime.now(timezone.utc) - timedelta(hours=1)
+        time_threshold = datetime.now(timezone.utc) - timedelta(hours=24)
         stmt: Select[SQLAlchemyUser] = select(self.model).filter(
             self.model.created_at <= time_threshold, self.model.is_active == False
         )

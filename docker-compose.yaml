@@ -3,15 +3,20 @@ version: "3.9"
 services:
 
   app:
-    build: ./
+    build: .
+    container_name: user_management_app
+    restart: always
     ports:
-      -"8000:8000"
+      - "8000:8000"
     environment:
-      PG_URL: postgresql+asyncpg://postgres:postgres@pg:5423/usersdb
+      PG_URL: postgresql+asyncpg://postgres:postgres@postgres:5432/usersdb
+      REDIS_URL: redis://redis:6379/1
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
-      REDIS_URL: redis://localhost:6379/1
       AUTH_LOGIN_URL: http://app:8000/auth/api/v1/login
-
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
 
   postgres:
     image: postgres:16
@@ -30,9 +35,9 @@ services:
     image: redis:7-alpine
     container_name: redis_cache
     restart: always
+    command: redis-server --appendonly yes
     ports:
       - "6379:6379"
-    command: redis-server --appendonly yes
     volumes:
       - redis_data:/data
 
@@ -44,8 +49,8 @@ services:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
     ports:
-      - "5672:5672"     # AMQP
-      - "15672:15672"   # UI dashboard
+      - "5672:5672"      # AMQP
+      - "15672:15672"    # RabbitMQ Management UI
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 

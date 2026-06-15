@@ -1,4 +1,6 @@
-#!/usr/bin/bash
+#!/bin/sh
+
+alembic upgrade headd &
 
 uvicorn src.application.app.app:app --reload --host 0.0.0.0 --port 8000 &
 
