@@ -2,6 +2,17 @@ version: "3.9"
 
 services:
 
+  app:
+    build: ./
+    ports:
+      -"8000:8000"
+    environment:
+      PG_URL: postgresql+asyncpg://postgres:postgres@pg:5423/usersdb
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672/
+      REDIS_URL: redis://localhost:6379/1
+      AUTH_LOGIN_URL: http://app:8000/auth/api/v1/login
+
+
   postgres:
     image: postgres:16
     container_name: postgres_db

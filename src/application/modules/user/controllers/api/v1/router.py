@@ -16,6 +16,7 @@ from src.application.modules.user.use_cases.create_user import CreateUserUseCase
 from src.application.modules.user.use_cases.delete_user import DeleteUserUseCase
 from src.application.modules.user.use_cases.get_users import GetUsersUseCase
 from src.application.modules.user.use_cases.update_user import UpdateUserUseCase
+from src.application.modules.user.use_cases.activate_user import ActivateUserUseCase
 
 users_api_v1_router: APIRouter = APIRouter(
     prefix="/users/api/v1", tags=["Users api v1"]
@@ -86,3 +87,13 @@ async def delete_user(
     use_case: FromDishka[DeleteUserUseCase],
 ) -> Optional[SUser]:
     return await use_case.execute(current_user=current_user, user_id=user_id)
+
+
+@users_api_v1_router.post(
+    "/activate/{token}", response_model=SUser, summary="Activates user"
+)
+@inject
+async def activate_user(
+    token: Annotated[str, Path(...)], use_case: FromDishka[ActivateUserUseCase]
+) -> Optional[SUser]:
+    return await use_case.execute(token=token)

@@ -30,4 +30,4 @@ class UserCache(IUserCache):
         cached_data: Optional[SAccountConfirmation] = await self.redis.get(name=key)
         if cached_data:
             log.info("Getting AccountCorfimation data from cache by key %s", key)
-            return cached_data
+            return SAccountConfirmation.model_validate_json(cached_data)

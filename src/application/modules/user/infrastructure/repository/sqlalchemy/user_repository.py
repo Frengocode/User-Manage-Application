@@ -108,7 +108,7 @@ class SQLALchemyUserRepository(IUserRepository):
 
     async def update_status(self, user: User) -> User:
         """Updates user status"""
-        stmt: Select[SQLAlchemyUser] = select(self.model).where(id=user.id)
+        stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(id=user.id.value)
         result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
         updating_user: SQLAlchemyUser = result.scalars().first()
 

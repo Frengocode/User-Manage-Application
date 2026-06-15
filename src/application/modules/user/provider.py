@@ -36,6 +36,7 @@ from src.application.modules.user.interfaces.use_cases.iget_auth_user import (
     IGetAuthUserUseCase,
 )
 from src.application.modules.user.interfaces.use_cases.iget_user import IGetUserUseCase
+from src.application.modules.user.use_cases.activate_user import ActivateUserUseCase
 from src.application.modules.user.use_cases.create_user import CreateUserUseCase
 from src.application.modules.user.use_cases.delete_user import DeleteUserUseCase
 from src.application.modules.user.use_cases.get_auth_user import GetAuthUserUseCase
@@ -102,3 +103,9 @@ class UserProvider(Provider):
         return UserCreatedEventHandler(
             cache=cache, account_confirmation_sender=account_confirmation_sender
         )
+
+    @provide(scope=Scope.REQUEST)
+    def activate_account_use_case(
+        self, service: IUserService, cache: IUserCache
+    ) -> ActivateUserUseCase:
+        return ActivateUserUseCase(service=service, cache=cache)
