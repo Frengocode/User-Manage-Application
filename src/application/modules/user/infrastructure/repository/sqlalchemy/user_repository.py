@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from typing import List, Optional, Union
 
 from sqlalchemy import Result, Select, select
@@ -141,14 +142,26 @@ class SQLALchemyUserRepository(IUserRepository):
 
         return self._model_to_domain(updating_user)
 
-    async def delete_user(self, user_id: Id) -> User:
+    async def delete_user(self, user_id: Id) -> Optional[User]:
         """Delete user"""
         stmt: Select[SQLAlchemyUser] = select(self.model).filter_by(id=user_id.value)
         result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
         user: SQLAlchemyUser = result.scalars().first()
-        await self.session.delete(user)
-        await self.session.commit()
+        if user is not None:
+            await self.session.delete(user)
+            await self.session.commit()
+
+            # Dumps orm object into domain model object
+            user.id = user_id.value
+            return self._model_to_domain(user)
+
+    async def get_not_activated_users(self) -> List[User]:
+        time_threshold = datetime.now(timezone.utc) - timedelta(hours=1)
+        stmt: Select[SQLAlchemyUser] = select(self.model).filter(
+            self.model.created_at <= time_threshold, self.model.is_active == False
+        )
+        result: Result[SQLAlchemyUser] = await self.session.execute(stmt)
+        users: List[SQLAlchemyUser] = result.scalars().all()
 
         # Dumps orm object into domain model object
-        user.id = user_id.value
-        return self._model_to_domain(user)
+        return self._model_to_domain(users)

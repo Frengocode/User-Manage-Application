@@ -34,5 +34,5 @@ class UserCreatedEventHandler(IUserCreatedEventHandler):
         )
 
         confirmation_data: SAccountConfirmation = SAccountConfirmation(id=payload.id)
-        await self.cache.set_confirmation_data(confirmation_data)
+        await self.cache.set_confirmation_data(data=confirmation_data, token=token)
         log.info("[UserCreatedEvent] was succesfully handled %s", payload)

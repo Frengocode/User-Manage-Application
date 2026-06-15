@@ -7,7 +7,6 @@ from src.application.common.shared.pagination.pagination import BasePagination
 from src.application.modules.user.domain.entities.user import User
 from src.application.modules.user.domain.exceptions.exceptions import (
     ExistUserException,
-    PermissionDenied,
 )
 from src.application.modules.user.domain.value_objects.email import Email
 from src.application.modules.user.domain.value_objects.id import Id
@@ -16,7 +15,6 @@ from src.application.modules.user.domain.value_objects.password import Password
 from src.application.modules.user.domain.value_objects.role import Role
 from src.application.modules.user.domain.value_objects.surname import Surname
 from src.application.modules.user.exceptions.exceptions import (
-    AccessDeniedExceptionHTTP,
     ExistUserExceptionHTTP,
     UserNotFoundExceptionHTTP,
 )
@@ -25,6 +23,7 @@ from src.application.modules.user.interfaces.repository.iuser_repository import 
 )
 from src.application.modules.user.interfaces.services.iuser_service import IUserService
 from src.application.utils.utils import get_logger
+import asyncio
 
 log: logging.Logger = get_logger(__name__)
 
@@ -107,3 +106,11 @@ class UserService(IUserService):
             return user
         log.info("User not found %s", email)
         raise UserNotFoundExceptionHTTP()
+
+    async def delete_not_activated_users(self) -> None:
+        users = await self.repository.get_not_activated_users()
+
+        for user in users:
+            await self.repository.delete_user(user_id=user.id)
+
+        log.info("Deleted %s users", len(users))

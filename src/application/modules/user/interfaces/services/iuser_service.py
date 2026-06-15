@@ -53,3 +53,7 @@ class IUserService(Protocol):
     async def get_user_by_email(self, email: Email) -> Optional[User]: ...
 
     """ Get's user by email """
+
+    async def delete_not_activated_users(self) -> None: ...
+
+    """ Delete's not activated users """

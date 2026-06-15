@@ -25,6 +25,8 @@ class DeleteUserUseCase:
             log.info("Only admin can delete user")
             raise AccessDeniedExceptionHTTP()
 
-        deleted_user: User = await self.service.delete_user(user_id=id.Id(user_id))
+        deleted_user: Optional[User] = await self.service.delete_user(
+            user_id=id.Id(user_id)
+        )
         log.info("User was deleted successfully %s ", user_id)
         return SUser.cls(deleted_user)
