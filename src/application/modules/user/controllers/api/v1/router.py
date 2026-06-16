@@ -66,7 +66,7 @@ async def get_users(
 @users_api_v1_router.put(
     "/update/{user_id}",
     response_model=SUser,
-    summary="Updates user (Opportunity to update for anyone to update for anyone)",
+    summary="Updates user (Opportunity to update for anyone)",
 )
 @inject
 async def update_user_use_case(
