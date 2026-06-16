@@ -27,7 +27,7 @@ async def get_current_user(
         key=settings.auth.JWT_SECRET_KEY.get_secret_value(),
         algorithms=settings.auth.JWT_ALGORITHM,
     )
-    user_id = payload["sub"]
+    user_id: str = payload["sub"]
     log.info("Current was successfully getted %s", user_id)
 
     return await get_user_use_case.execute(user_id)
